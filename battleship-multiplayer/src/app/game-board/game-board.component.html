@@ -1,0 +1,113 @@
+<div class="game-container">
+  <h1>Epic Battleship</h1>
+  <h1>{{ gameMessage }}</h1>
+
+  <div *ngIf="!gameInProgress && gamemode === 0">
+    <h2>Choose Your Game Mode</h2>
+    <button (click)="startSinglePlayer()">Play Against Computer</button>
+    <button (click)="startMultiplayer()">Play Multiplayer</button>
+
+  </div>
+
+    
+  
+  <div class="status-container" *ngIf="!gameInProgress && gamemode === 2">
+      
+    <p *ngIf="!isConnected">Waiting for another player to connect...</p>
+    <p *ngIf="isConnected">Connected with another player! Ready to start the game!</p>
+   
+    <div *ngIf="!isConnected && gamemode === 2" class="loading-spinner"></div>
+    <div *ngIf="roomNumber">
+      <h3 *ngIf="!isConnected">Room Number: <br> 
+        {{ roomNumber }}</h3>
+    </div>
+    
+  </div>
+  
+  <div class="items-container"[ngClass]="{'pushup': gameInProgress == true}">
+    <h1>Items</h1>
+    <div class="items-grid">
+    <div class="item">
+      <div *ngIf="acquiredItems[0]">
+      <img [src]="itemImages[acquiredItems[0]]" alt="{{ acquiredItems[0] }} icon" (click)="useItem(acquiredItems[0])" class="item-image">
+    </div>
+ 
+    </div>
+    <div class="item">
+      <div *ngIf="acquiredItems[1]">
+      <img [src]="itemImages[acquiredItems[1]]" alt="{{ acquiredItems[1] }} icon"  (click)="useItem(acquiredItems[1]) " class="item-image">
+      </div>
+    
+    </div>
+    <div class="item">
+      <div *ngIf="acquiredItems[2]">
+      <img [src]="itemImages[acquiredItems[2]]" alt="{{ acquiredItems[2] }} icon" (click)="useItem(acquiredItems[2])" class="item-image">
+      </div>
+    
+    </div>
+  </div>
+</div>
+
+<div *ngIf="showColors" class="option-container">
+  <h2>Choose ocean background</h2>
+  <div class="option-grid">
+<div class="option">
+<button alt="ocean 1" style="background: linear-gradient(#5fc8ee, 75%, #1a4e63);" (click)="changeGridBackground('default-grid')" class="item-image"></button>
+</div>
+<div class="option">
+<button alt="ocean 2" style="background: linear-gradient(#3f699e, 75%, #1c2b3f);"  (click)="changeGridBackground('theme1-grid')" class="item-image"></button>
+</div>
+<div class="option">
+<button alt="ocean 2" style="background: linear-gradient(#36667e, 75%, rgb(16, 24, 36));"   (click)="changeGridBackground('theme2-grid')" class="item-image"></button>
+</div>
+</div>
+</div>
+
+  <div class="grids" [ngClass]="{'pushup': gameInProgress == true}">
+    <!-- Player's Grid -->
+    <div class="grid-container">
+    <h2 >Your Grid</h2>
+    <div [ngClass]="{'shake': isShaking }">
+    <div class="grid" [ngClass]="gridBackgroundClass">
+      
+      <div *ngFor="let row of playerGrid; let i = index" class="row">
+        <div *ngFor="let cell of row; let j = index"
+             class="cell"
+             [ngClass]="{'ship': cell === 'S', 'hit': cell === 'X', 'miss': cell === 'O',
+             'treasure': cell === 'I', 'enemy-cell': cell === 'S'}"
+             (click)="placePlayerShip(i, j)">
+        </div>
+      </div>
+    </div>
+    </div>
+    </div>
+
+    <!-- Computer's Grid -->
+     <div class="grid-container">
+    <h2 *ngIf="gamemode === 0">Opponent's Grid</h2>
+    <h2 *ngIf="gamemode === 1">Computer's Grid</h2>
+    <h2 *ngIf="gamemode === 2">{{ isConnected ? opponentName : 'Player' }}'s Grid</h2>
+    <div [ngClass]="{'shake': isShaking }">
+    <div class="grid" style="border-color: rgb(172, 27, 27)" [ngClass]="gridBackgroundClass">
+
+      <div *ngFor="let row of computerGrid; let i = index" class="row">
+        <div *ngFor="let cell of row; let j = index"
+             class="cell"
+             [ngClass]="{
+              'hit': cell === 'X',
+              'miss': cell === 'O',
+              'treasure': cell === 'I'
+            }"
+
+             (click)="fireAtComputer(i, j)">
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+
+ 
+  </div>
+  <h1 class="bottom-message">{{ gameMessage }}</h1>
+</div>
+
