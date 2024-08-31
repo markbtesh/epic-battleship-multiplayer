@@ -4,11 +4,11 @@
       "src": "battleship-multiplayer/angular.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "battleship-multiplayer/dist/battleship-multiplayer" // Ensure this matches the `outputPath`
+        "distDir": "dist/battleship-multiplayer" // Ensure this matches the `outputPath`
       }
     }
   ],
-  "routes": [
+  "rewrites": [
     {
       "src": "/(.*)",
       "dest": "/index.html"
