@@ -10,5 +10,5 @@ import { GameBoardComponent } from './game-board/game-board.component';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'battleship-single-player';
+  title = 'battleship-multiplayer';
 }
