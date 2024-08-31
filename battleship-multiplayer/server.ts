@@ -15,13 +15,6 @@ export function app(): express.Express {
   const commonEngine = new CommonEngine();
 
 
-server.use((req, res, next) => {
-  res.setTimeout(60000, () => {
-    console.error('Request has timed out.');
-    res.sendStatus(408);
-  });
-  next();
-});
 
   server.set('view engine', 'html');
   server.set('views', browserDistFolder);
