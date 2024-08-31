@@ -12,9 +12,9 @@
       "src": "package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "dist/battleship-single-player"
+        "distDir": "dist/battleship-multiplayer"
       }
     }
   ],
-  "outputDirectory": "dist/battleship-single-player"
+  "outputDirectory": "dist/battleship-multiplayer"
 }
