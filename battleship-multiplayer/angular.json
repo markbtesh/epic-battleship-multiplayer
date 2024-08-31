@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "battleship-single-player": {
+    "battleship-multiplayer": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/battleship-single-player",
+            "outputPath": "dist/battleship-multiplayer",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
