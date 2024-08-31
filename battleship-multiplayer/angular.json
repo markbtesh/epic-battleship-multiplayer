@@ -69,10 +69,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "battleship-single-player:build:production"
+              "buildTarget": "battleship-multiplayer:build:production"
             },
             "development": {
-              "buildTarget": "battleship-single-player:build:development"
+              "buildTarget": "battleship-multiplayer:build:development"
             }
           },
           "defaultConfiguration": "development"
