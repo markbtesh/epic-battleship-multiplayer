@@ -18,7 +18,9 @@ let waitingGameId = null;
 io.on('connection', (socket) => {
     console.log('A user connected: ', socket.id);
 
-
+app.get('/', async (req, res) => {
+    res.send('Hello');
+})
 
    socket.on('joinGame', (gameId, playerName) => {
     // If there's a game with one player waiting, join that game
