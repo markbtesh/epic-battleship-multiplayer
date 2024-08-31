@@ -1,17 +1,16 @@
 {
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
   "builds": [
     {
       "src": "battleship-multiplayer/angular.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "dist/battleship-multiplayer" // Ensure this matches the `outputPath`
+        "distDir": "battleship-multiplayer/dist/battleship-single-player"
       }
     }
   ],
-  "rewrites": [
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    }
-  ]
-}
