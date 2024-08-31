@@ -5,15 +5,30 @@ const { Server } = require('socket.io');
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server, {
-    cors: {
-      origin: 'http://localhost:4200', // Replace with your client's origin
-      methods: ['GET', 'POST']
-    }
-  });
+const io = socketIo(server, {
+  cors: {
+    origin: process.env.VERCEL_DOMAIN || 'http://localhost:3000',
+    methods: ["GET", "POST"],
+    credentials: true
+  }
+});
+
 
 let games = {}; // Store active games
 let waitingGameId = null; 
+
+
+
+app.use(cors({
+  origin: process.env.VERCEL_DOMAIN || 'http://localhost:3000',
+  credentials: true
+}));
+
+app.get('/', (req, res) => {
+  res.send('Epic Battleship Multiplayer Server is running!');
+});
+
+
 
 io.on('connection', (socket) => {
     console.log('A user connected: ', socket.id);
