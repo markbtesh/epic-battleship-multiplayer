@@ -7,7 +7,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
-    origin: 'https://epic-battleship-multiplayer-server-hbzbxkk3t.vercel.app:3000',
+    origin: 'http://localhost:3000',
     methods: ["GET", "POST"],
     credentials: true
   }
@@ -20,7 +20,7 @@ let waitingGameId = null;
 
 
 app.use(cors({
-  origin: 'https://epic-battleship-multiplayer-server-hbzbxkk3t.vercel.app:3000',
+  origin: 'http://localhost:3000',
   credentials: true
 }));
 
