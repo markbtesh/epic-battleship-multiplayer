@@ -4,9 +4,10 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test",
+  "build": "ng build --prod",
+  "test": "ng test",
+  "lint": "ng lint",
+  "e2e": "ng e2e"
     "serve:ssr:battleship-single-player": "node dist/battleship-single-player/server/server.mjs"
   },
   "private": true,
