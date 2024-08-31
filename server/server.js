@@ -4,7 +4,13 @@ const socketIo = require('socket.io');
 const { Server } = require('socket.io');
 
 const app = express();
-const server = http.createServer(app);
+const server = http.createServer((req, res) => {
+    // Set the response header
+    res.writeHead(200, {'Content-Type': 'text/plain'});
+    // Write some text to the response
+    res.end('Welcome to my simple Node.js app!');
+});
+ 
 const io = socketIo(server, {
   cors: {
     origin: 'http://localhost:3000',
