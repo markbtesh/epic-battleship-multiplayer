@@ -1,6 +1,6 @@
 <div class="game-container">
   <h1>Epic Battleship</h1>
-  <h1>{{ gameMessage }}</h1>
+  <h1 *ngIf="gamemode !== 0">{{ gameMessage }}</h1>
 
   <div *ngIf="!gameInProgress && gamemode === 0">
     <h2>Choose Your Game Mode</h2>
@@ -74,7 +74,7 @@
         <div *ngFor="let cell of row; let j = index"
              class="cell"
              [ngClass]="{'ship': cell === 'S', 'hit': cell === 'X', 'miss': cell === 'O',
-             'treasure': cell === 'I', 'enemy-cell': cell === 'S'}"
+             'treasure': cell === 'I'}"
              (click)="placePlayerShip(i, j)">
         </div>
       </div>
@@ -108,6 +108,7 @@
 
  
   </div>
+  <h2 >{{ whosturn }}</h2>
   <h1 class="bottom-message">{{ gameMessage }}</h1>
 </div>
 

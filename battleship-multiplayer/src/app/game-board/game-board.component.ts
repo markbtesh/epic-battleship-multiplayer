@@ -32,7 +32,7 @@ export class GameBoardComponent implements OnInit {
   };
   acquiredItems: string[] = [];  // List of items acquired by the player
   computerItems: string[] = [];  // List of items acquired by the computer
-  gameMessage: string = 'Place your ships!';
+  gameMessage: string = 'Place your 5 ships!';
   isPlayerTurn: boolean = false;
   gameInProgress: boolean = false;
   enableBomb: boolean = false;
@@ -53,6 +53,7 @@ export class GameBoardComponent implements OnInit {
   playerName: string = '';
   opponentName: string = '';
   playerIndex: number | null = null;
+  whosturn: string = "";
 
   // Method to handle when a ship gets hit
   handleHit(): void {
@@ -71,7 +72,9 @@ export class GameBoardComponent implements OnInit {
     // Initialize socket with autoConnect set to false
     if (isPlatformBrowser(this.platformId)) {
       
-      this.socket = io('http://localhost:3000', { autoConnect: false });
+      this.socket = io('http://192.168.1.19:3000', {
+        withCredentials: true, // Important for CORS with credentials (like cookies)
+      });
       inject(ApplicationRef).isStable.pipe(
         first(isStable => isStable)
       ).subscribe(() => {
@@ -192,8 +195,9 @@ export class GameBoardComponent implements OnInit {
 
       if (this.playerShips.length === 5) {
         if (this.isMultiplayer) {
+          this.whosturn = "Waiting for opponent..."
         this.socket.emit('readyShips', { gameId: this.roomNumber, playerIndex: this.playerIndex });
-        console.log("send to ready");
+        console.log("send to ready " + this.playerIndex);
         }
         if (!this.isMultiplayer) {
           this.startGame();
@@ -209,6 +213,7 @@ export class GameBoardComponent implements OnInit {
     this.placeItemsOnGrid();
     console.log("game started")
     this.gameMessage = 'Your turn! Fire at the enemy!';
+    this.whosturn = 'Your turn!';
 
     if (this.isMultiplayer) {
      
@@ -257,16 +262,26 @@ export class GameBoardComponent implements OnInit {
     });
 
     this.socket.on('opponentShot', ({ x, y, hit }) => {
-      hit = this.playerGrid[x][y] === 'S';
-      console.log("opponent hit")
-      this.playerGrid[x][y] = hit ? 'X' : 'O';
-      this.gameMessage = hit ? 'Your ship was hit!' : 'Opponent missed!';
+
+      let foundItem: boolean = this.playerGrid[x][y] === 'I'; // Check if the cell contains an item
+
+if (foundItem) {
+    
+    // You can update the grid to show that the item was found, e.g.:
+    this.playerGrid[x][y] = 'I'; // Optionally keep 'I' if you want to keep it visible
+} else {
+    hit = this.playerGrid[x][y] === 'S'; // Check if it's a ship
+    console.log("opponent hit")
+    this.playerGrid[x][y] = hit ? 'X' : 'O'; // Mark the cell accordingly
+    this.gameMessage = hit ? 'Your ship was hit!' : 'Opponent missed!';
+}   this.whosturn = "Your turn!"
       this.isPlayerTurn = true;
 
       if (hit) {
         this.playerShips = this.playerShips.filter(ship => !(ship.x === x && ship.y === y));
         if (this.playerShips.length === 0) {
           this.gameMessage = 'You lost!';
+          this.whosturn = '';
           this.gameInProgress = false;
         }
       }
@@ -284,6 +299,7 @@ export class GameBoardComponent implements OnInit {
 
     this.socket.on('itemReveal', ({ x, y}) => {
         this.playerGrid[x][y] = 'I';
+        console.log(this.playerGrid[x][y])
     });
 
     this.socket.on('opponentName', (name: string) => {
@@ -292,11 +308,11 @@ export class GameBoardComponent implements OnInit {
       this.cdr.detectChanges(); 
   });
 
-    this.socket.on('useRadarJammer', (updatedGrid: string[][]) => {
-      this.useRadarJammer(updatedGrid, false); // Update the opponent's grid
-      this.cdr.detectChanges(); // Trigger change detection to update the view
-    });
-
+  this.socket.on('RadarJammer', () => {
+    
+    this.useRadarJammer(this.computerGrid, false); // Update the opponent's grid
+    this.cdr.detectChanges(); // Trigger change detection to update the view
+});
     this.socket.on('fire', ({ x, y }) => {
       const hit = this.playerGrid[x][y] === 'S';
       this.playerGrid[x][y] = hit ? 'X' : 'O';
@@ -355,14 +371,18 @@ export class GameBoardComponent implements OnInit {
       this.computerGrid[x][y] = hit ? 'X' : 'O';
 
       this.gameMessage = hit ? 'Hit!' :  'Miss!';
-      
+      this.whosturn = this.opponentName + "'s turn";
+       
       if (item) {
         this.acquireRandomItem(true);
         this.computerGrid[x][y] = 'I';
         if(this.isMultiplayer)
         this.socket.emit('itemReveal', { x, y });
         this.itemCells = this.itemCells.filter(item => !(item.x === x && item.y === y));
+        
+        
       }
+      
       if (hit && !this.enableHomingMissile) {
         this.computerShips = this.computerShips.filter(ship => !(ship.x === x && ship.y === y));
         this.playSound('explode');
@@ -376,6 +396,7 @@ export class GameBoardComponent implements OnInit {
       } else {
         this.playSound('splash');
       }
+
       if (this.enableBomb) {
         this.useMineBomb(x, y, this.computerGrid, this.computerShips, true);
         this.enableBomb = false;
@@ -396,6 +417,8 @@ export class GameBoardComponent implements OnInit {
       else {
         setTimeout(() => this.computerMove(), 1000);
       }
+
+     
       console.log(this.gameMessage);
       
     }
@@ -503,7 +526,7 @@ export class GameBoardComponent implements OnInit {
   }
 
   acquireRandomItem(forPlayer: boolean): void {
-    const items = ['Mine Bomb', 'Radar Jammer', 'Rocket Deceiver', 'Airstrike', 'Homing Missile'];
+    const items = [ 'Mine Bomb', 'Radar Jammer', 'Rocket Deceiver', 'Airstrike', 'Homing Missile']; 
     const randomItem = items[Math.floor(Math.random() * items.length)];
 
     if (forPlayer) {
@@ -514,8 +537,8 @@ export class GameBoardComponent implements OnInit {
       }
     } else {
       if (this.computerItems.length < 3) {
-       // this.computerItems.push(randomItem);
-        this.gameMessage = `Opponent acquired an item!`;
+        this.computerItems.push(randomItem);
+        this.gameMessage = `Opponent acquired an item! ${randomItem}`;
       }
     }
   }
@@ -710,24 +733,19 @@ useHomingMissile(x: number, y: number, targetGrid: string[][], targetShips: { x:
 }
 
 
-useRadarJammer(targetGrid: string[][], isPlayerUsing: boolean): void {
+useRadarJammer(targetGrid: string[][], isInitiator: boolean): void {
   for (let x = 0; x < this.gridSize; x++) {
-    for (let y = 0; y < this.gridSize; y++) {
-      if (targetGrid[x][y] === 'O') {
-        targetGrid[x][y] = ''; // Clear missed cells
+      for (let y = 0; y < this.gridSize; y++) {
+          if (targetGrid[x][y] === 'O') {
+              targetGrid[x][y] = ''; // Clear missed cells
+          }
       }
-    }
   }
-
-  if (this.isMultiplayer) 
-  // Determine the appropriate message based on who is using the item
-  if (isPlayerUsing) {
-    this.gameMessage = 'Your missed cells have been cleared!';
-    this.socket.emit('useRadarJammer', targetGrid); // Emit event to server to sync with opponent
-  } else {
-    this.gameMessage = 'Opponent cleared their missed cells!';
+  if (this.isMultiplayer)
+  if (isInitiator) {
+      this.socket.emit('useRadarJammer', targetGrid);
   }
-
+  this.gameMessage = targetGrid === this.computerGrid ? 'Opponent used Radar Jammer' : 'Your missed cells have been cleared!';
   this.playSound("ping");
 }
 

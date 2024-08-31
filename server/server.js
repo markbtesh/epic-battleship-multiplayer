@@ -1,16 +1,25 @@
 const express = require('express');
+const cors = require('cors');
 const http = require('http');
 const socketIo = require('socket.io');
 const { Server } = require('socket.io');
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server, {
+
+app.use(cors({
+  origin: 'http://192.168.1.19:4200',  // Allow requests from your Angular app
+  methods: ['GET', 'POST'],  // Specify allowed methods
+  credentials: true,  // If you need to send cookies or other credentials
+}));
+
+  const io = require('socket.io')(server, {
     cors: {
-      origin: 'http://localhost:4200', // Replace with your client's origin
-      methods: ['GET', 'POST']
+        origin: 'http://192.168.1.19:4200',  // Allow socket connections from your Angular app
+        methods: ['GET', 'POST'],
+        credentials: true,
     }
-  });
+});
 
 let games = {}; // Store active games
 let waitingGameId = null; 
@@ -26,7 +35,7 @@ io.on('connection', (socket) => {
         gameId = waitingGameId; // Join the waiting game
     } else if (!games[gameId]) {
         // If no game exists with this ID, create a new game
-        games[gameId] = { players: [], moves: [], names: [], deceiverActive: {}, ready: [false, false] };
+        games[gameId] = { players: [], names: [], deceiverActive: {}, ready: [false, false] };
         console.log('room created: ' + gameId);
     }
 
@@ -120,9 +129,12 @@ if (games[gameId].deceiverActive[opponentId]) {
      
 
       socket.on('itemReveal', ({ x, y}) => {
+        
         const gameId = Object.keys(games).find(id => games[id].players.includes(socket.id));
+        
         if (gameId) {
           const opponent = games[gameId].players.find(id => id !== socket.id);
+          console.log(opponent)
           io.to(opponent).emit('itemReveal', { x, y });
          
         }
@@ -140,8 +152,8 @@ if (games[gameId].deceiverActive[opponentId]) {
       socket.on('readyShips', ({ gameId, playerIndex }) => {
         const game = games[gameId];
         if (game) {
-            game.ready[playerIndex - 1] = true;
-            console.log(playerIndex);
+            game.ready[playerIndex] = true;
+           
             // Check if both players are ready
             if (games[gameId].ready.every(ready => ready)) {
               io.to(gameId).emit('startGame');
@@ -150,18 +162,20 @@ if (games[gameId].deceiverActive[opponentId]) {
         }
     });
 
-
-      socket.on('useRadarJammer', (updatedGrid) => {
-        const room = Object.keys(socket.rooms).find(room => room !== socket.id);
-        socket.to(room).emit('useRadarJammer', updatedGrid);
-      });
-
-    socket.on('makeMove', (gameId, move) => {
-        if (games[gameId]) {
-            games[gameId].moves.push(move);
-            io.to(gameId).emit('updateGame', move);
-        }
-    });
+    socket.on('useRadarJammer', (updatedGrid) => {
+      const gameId = Object.keys(games).find(id => games[id].players.includes(socket.id));
+      if (gameId) {
+          const opponent = games[gameId].players.find(id => id !== socket.id);
+          if (opponent) {
+              socket.to(opponent).emit('RadarJammer', updatedGrid); // Send the updated grid to the opponent
+              console.log("Grid cleared for opponent");
+          } else {
+              console.log("Opponent not found in the game");
+          }
+      } else {
+          console.log("Room not found");
+      }
+  });
 
     socket.on('disconnect', () => {
         console.log('A user disconnected: ', socket.id);
