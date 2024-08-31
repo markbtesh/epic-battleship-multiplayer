@@ -7,12 +7,12 @@
   ],
   
 
-  "builds": [
+ "builds": [
     {
-      "src": "package.json",
+      "src": "battleship-multiplayer/angular.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "dist/battleship-multiplayer"
+        "distDir": "battleship-multiplayer/dist/battleship-multiplayer"
       }
     }
   ],
