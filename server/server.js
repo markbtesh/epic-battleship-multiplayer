@@ -24,9 +24,9 @@ app.use(cors({
   credentials: true
 }));
 
-app.get('/', (req, res) => {
-  res.send('Epic Battleship Multiplayer Server is running!');
-});
+app.get('/', async (req, res) => {
+    res.send('Hello battleship is running');
+})
 
 
 
