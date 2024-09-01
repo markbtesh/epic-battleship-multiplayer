@@ -21,6 +21,14 @@ app.use(cors({
     }
 });
 
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'http://battleship.markbtesh.com');
+  res.header('Access-Control-Allow-Methods', 'GET,POST');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  next();
+});
+
 let games = {}; // Store active games
 let waitingGameId = null; 
 

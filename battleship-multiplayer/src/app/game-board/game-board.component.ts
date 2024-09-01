@@ -202,7 +202,7 @@ export class GameBoardComponent implements OnInit {
         if (!this.isMultiplayer) {
           this.startGame();
         }
-        
+        this.showColors = false;
       }
     }
   }
@@ -788,7 +788,6 @@ useRadarJammer(targetGrid: string[][], isInitiator: boolean): void {
   startSinglePlayer(): void {
     this.placeComputerShips();
     this.gamemode = 1;
-    this.showColors = false;
   }
   
   startMultiplayer(): void {
