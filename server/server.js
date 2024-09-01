@@ -7,11 +7,14 @@ const { Server } = require('socket.io');
 const app = express();
 const server = http.createServer(app);
 
-app.use(cors({
-  origin: 'http://battleship.markbtesh.com',  // Allow requests from your Angular app
-  methods: ['GET', 'POST'],  // Specify allowed methods
-  credentials: true,  // If you need to send cookies or other credentials
-}));
+const corsOptions = {
+  origin: 'http://battleship.markbtesh.com', // Replace with your client URL
+  methods: ['GET', 'POST'], // Add other methods if needed
+  allowedHeaders: ['Content-Type', 'Authorization'], // Add other headers if needed
+  credentials: true // Enable this if your requests involve cookies or other credentials
+};
+
+app.use(cors(corsOptions));
 
   const io = require('socket.io')(server, {
     cors: {
