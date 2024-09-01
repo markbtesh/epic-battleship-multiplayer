@@ -72,7 +72,7 @@ export class GameBoardComponent implements OnInit {
     // Initialize socket with autoConnect set to false
     if (isPlatformBrowser(this.platformId)) {
       
-      this.socket = io('https://epic-battleship-multiplayer-server-4x1lukrf7.vercel.app', {
+      this.socket = io('https://epic-battleship-multiplayer-server.onrender.com', {
         withCredentials: true
       });
       inject(ApplicationRef).isStable.pipe(
