@@ -527,7 +527,7 @@ if (foundItem) {
   }
 
   acquireRandomItem(forPlayer: boolean): void {
-    const items = [ 'Mine Bomb', 'Radar Jammer', 'Rocket Deceiver', 'Airstrike', 'Homing Missile']; 
+    const items = [  'Mine Bomb', 'Radar Jammer', 'Rocket Deceiver', 'Airstrike', 'Homing Missile' ]; 
     const randomItem = items[Math.floor(Math.random() * items.length)];
 
     if (forPlayer) {
@@ -555,7 +555,7 @@ if (foundItem) {
         this.useRadarJammer(this.playerGrid, true);
         break;
       case 'Rocket Deceiver':
-        this.useRocketDeceiver(this.deceiverActive);
+        this.useRocketDeceiver(false);
         break;
       case 'Airstrike':
         this.enableAirstrike = true;
@@ -584,7 +584,7 @@ if (foundItem) {
         this.useRadarJammer(this.computerGrid, true);
         break;
       case 'Rocket Deceiver':
-        this.useRocketDeceiver(this.deceiverComputerActive);
+        this.useRocketDeceiver(true);
         break;
       case 'Airstrike':
         this.enableComputerAirstrike = true;
@@ -751,12 +751,16 @@ useRadarJammer(targetGrid: string[][], isInitiator: boolean): void {
 }
 
 
-  useRocketDeceiver(deceiver: boolean): void {
+  useRocketDeceiver(onPlayer: boolean): void {
     if (this.isMultiplayer) {
       this.socket.emit('activateDeceiver', { gameId: this.roomNumber, opponentName: this.opponentName });
          // Notify the server
+    }
+
+    if (onPlayer){
+      this.deceiverComputerActive = true; // Single player mode
     } else {
-      this.deceiverActive = true; // Single player mode
+      this.deceiverActive = true;
     }
     this.gameMessage = 'Rocket Deceiver activated! The opponent\'s next hit will be misdirected!';
   }
