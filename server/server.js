@@ -7,27 +7,22 @@ const { Server } = require('socket.io');
 const app = express();
 const server = http.createServer(app);
 
+const allowedOrigin = 'http://battleship.markbtesh.com';
+
 app.use(cors({
-  origin: '\*',  // Allow requests from your Angular app
+  origin: allowedOrigin,  // Allow requests only from this origin
   methods: ['GET', 'POST'],  // Specify allowed methods
-  credentials: true,  // If you need to send cookies or other credentials
+  credentials: true,  // Allow credentials (cookies, etc.)
 }));
 
- const io = new Server(server, {  
-  cors: {  
-origin: '\*',  
-     methods: ['GET', 'POST'],  // Specify allowed methods
-  credentials: true, 
-  }  
-}); 
-
-app.use((req, res, next) => {
-  console.log('Request received:', req.method, req.url);
-  res.on('finish', () => {
-    console.log('Response headers:', res.getHeaders());
-  });
-  next();
+const io = new Server(server, {
+  cors: {
+    origin: allowedOrigin,  // Allow socket connections only from this origin
+    methods: ['GET', 'POST'],
+    credentials: true,
+  }
 });
+
 let games = {}; // Store active games
 let waitingGameId = null; 
 
