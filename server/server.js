@@ -8,14 +8,14 @@ const app = express();
 const server = http.createServer(app);
 
 app.use(cors({
-  origin: 'https://epic-battleship-multiplayer-server-8afujv666.vercel.app:4200' || 'http://localhost:4200',  // Allow requests from your Angular app
+  origin: 'https://epic-battleship-multiplayer-server-8afujv666.vercel.app' || 'http://localhost:4200',  // Allow requests from your Angular app
   methods: ['GET', 'POST'],  // Specify allowed methods
   credentials: true,  // If you need to send cookies or other credentials
 }));
 
   const io = require('socket.io')(server, {
     cors: {
-        origin: 'https://epic-battleship-multiplayer-server-8afujv666.vercel.app:4200' || 'http://localhost:4200',  // Allow socket connections from your Angular app
+        origin: 'https://epic-battleship-multiplayer-server-8afujv666.vercel.app' || 'http://localhost:4200',  // Allow socket connections from your Angular app
         methods: ['GET', 'POST'],
         credentials: true,
     }
