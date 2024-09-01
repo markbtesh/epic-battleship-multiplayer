@@ -9,17 +9,16 @@ const server = http.createServer(app);
 
 const allowedOrigin = 'http://battleship.markbtesh.com';
 
-app.use(cors({    
-   origin: '*',   
-     methods: '*',   
-       allowedHeaders: ['Content-Type', 'Authorization'],     
-       credentials: true,   }));
+app.use(cors({
+  origin: allowedOrigin,  // Allow requests only from this origin
+  methods: ['GET', 'POST'],  // Specify allowed methods
+  credentials: true,  // Allow credentials (cookies, etc.)
+}));
 
 const io = new Server(server, {
   cors: {
-    origin: "*",  // Allow socket connections only from this origin
-    methods: '*',   
-    allowedHeaders: ['Content-Type', 'Authorization'],     
+    origin: allowedOrigin,  // Allow socket connections only from this origin
+    methods: ['GET', 'POST'],
     credentials: true,
   }
 });
