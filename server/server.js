@@ -7,7 +7,7 @@ const { Server } = require('socket.io');
 const app = express();
 const server = http.createServer(app);
 
-const allowedOrigin = 'http://www.battleship.markbtesh.com';
+const allowedOrigin = 'http://battleship.markbtesh.com';
 
 app.use(cors({
   origin: allowedOrigin,  // Allow requests only from this origin
