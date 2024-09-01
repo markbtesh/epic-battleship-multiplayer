@@ -8,14 +8,14 @@ const app = express();
 const server = http.createServer(app);
 
 app.use(cors({
-  origin: 'https://battleship.markbtesh.com',  // Allow requests from your client app
+  origin: 'http://battleship.markbtesh.com',  // Allow requests from your client app
   methods: ['GET', 'POST'],  // Specify allowed methods
   credentials: true,  // Allow credentials (cookies, etc.)
 }));
 
 const io = new Server(server, {
   cors: {
-    origin: 'https://battleship.markbtesh.com',  // Allow socket connections from your Angular app
+    origin: 'http://battleship.markbtesh.com',  // Allow socket connections from your Angular app
     methods: ['GET', 'POST'],
     credentials: true,
   }
