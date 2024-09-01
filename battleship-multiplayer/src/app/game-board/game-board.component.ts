@@ -213,10 +213,10 @@ export class GameBoardComponent implements OnInit {
     this.placeItemsOnGrid();
     console.log("game started")
     this.gameMessage = 'Your turn! Fire at the enemy!';
-    this.whosturn = 'Your turn!';
+    
     this.showColors = false;
     if (this.isMultiplayer) {
-     
+      this.whosturn = 'Your turn!';
       this.socket.emit('startGame');
     }
   }
