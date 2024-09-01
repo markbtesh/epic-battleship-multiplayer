@@ -7,7 +7,7 @@ const { Server } = require('socket.io');
 const app = express();
 const server = http.createServer(app);
 
-const allowedOrigin = 'http://battleship.markbtesh.com';
+const allowedOrigin = 'http://www.battleship.markbtesh.com';
 
 app.use(cors({
   origin: allowedOrigin,  // Allow requests only from this origin
@@ -27,7 +27,7 @@ let games = {}; // Store active games
 let waitingGameId = null; 
 
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'http://battleship.markbtesh.com');
+  res.header('Access-Control-Allow-Origin', 'http://www.battleship.markbtesh.com');
   res.header('Access-Control-Allow-Methods', 'GET,POST');
   res.header('Access-Control-Allow-Headers', 'Content-Type');
   res.header('Access-Control-Allow-Credentials', 'true');
