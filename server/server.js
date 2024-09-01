@@ -26,6 +26,14 @@ const io = new Server(server, {
 let games = {}; // Store active games
 let waitingGameId = null; 
 
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'http://battleship.markbtesh.com');
+  res.header('Access-Control-Allow-Methods', 'GET,POST');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  next();
+});
+
 io.on('connection', (socket) => {
     console.log('A user connected: ', socket.id);
 
