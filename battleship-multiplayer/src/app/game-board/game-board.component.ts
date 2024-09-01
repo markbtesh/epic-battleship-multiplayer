@@ -527,7 +527,7 @@ if (foundItem) {
   }
 
   acquireRandomItem(forPlayer: boolean): void {
-    const items = [  'Homing Missile' ]; 
+    const items = [ 'Mine Bomb', 'Radar Jammer', 'Rocket Deceiver', 'Airstrike', 'Homing Missile'  ]; 
     const randomItem = items[Math.floor(Math.random() * items.length)];
 
     if (forPlayer) {
