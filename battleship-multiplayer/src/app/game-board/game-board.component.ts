@@ -53,7 +53,7 @@ export class GameBoardComponent implements OnInit {
   playerName: string = '';
   opponentName: string = '';
   playerIndex: number | null = null;
-  whosturn: string = "";
+  whosturn: string = "asdsa";
 
   // Method to handle when a ship gets hit
   handleHit(): void {
@@ -72,7 +72,7 @@ export class GameBoardComponent implements OnInit {
     // Initialize socket with autoConnect set to false
     if (isPlatformBrowser(this.platformId)) {
       
-      this.socket = io('https://epic-battleship-multiplayer-server-8afujv666.vercel.app:3000', {
+      this.socket = io('https://epic-battleship-multiplayer-server-8afujv666.vercel.app', {
         withCredentials: true, // Important for CORS with credentials (like cookies)
       });
       inject(ApplicationRef).isStable.pipe(
@@ -371,6 +371,7 @@ if (foundItem) {
       this.computerGrid[x][y] = hit ? 'X' : 'O';
 
       this.gameMessage = hit ? 'Hit!' :  'Miss!';
+      if(this.isMultiplayer)
       this.whosturn = this.opponentName + "'s turn";
        
       if (item) {
