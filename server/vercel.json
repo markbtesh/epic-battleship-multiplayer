@@ -8,16 +8,5 @@
   ],
   "routes": [
     { "src": "/(.*)", "dest": "server.js" }
-  ], 
-    "headers": [
-      {
-        "source": "/(.*)",
-        "headers": [
-          { "key": "Access-Control-Allow-Origin", "value": "http://battleship.markbtesh.com" },
-          { "key": "Access-Control-Allow-Methods", "value": "GET,POST" },
-          { "key": "Access-Control-Allow-Headers", "value": "Content-Type" }
-        ]
-      }
-    ]
-  
+  ]
 }
