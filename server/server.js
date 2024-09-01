@@ -9,7 +9,8 @@ const server = http.createServer(app);
 
 app.use(cors({
   origin: '*',  // Allow requests from your Angular app
-  methods: ['GET', 'POST'],  // Specify allowed methods
+  methods: ['GET', 'POST'], 
+  credentials: true // Specify allowed methods
   // If you need to send cookies or other credentials
 }));
 
