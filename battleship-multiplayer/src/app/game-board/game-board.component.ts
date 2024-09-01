@@ -72,7 +72,7 @@ export class GameBoardComponent implements OnInit {
     // Initialize socket with autoConnect set to false
     if (isPlatformBrowser(this.platformId)) {
       
-      this.socket = io('https://epic-battleship-multiplayer-server-8afujv666.vercel.app', {
+      this.socket = io('https://epic-battleship-multiplayer-server-4x1lukrf7.vercel.app', {
         withCredentials: true, // Important for CORS with credentials (like cookies)
       });
       inject(ApplicationRef).isStable.pipe(
@@ -214,7 +214,7 @@ export class GameBoardComponent implements OnInit {
     console.log("game started")
     this.gameMessage = 'Your turn! Fire at the enemy!';
     this.whosturn = 'Your turn!';
-
+    this.showColors = false;
     if (this.isMultiplayer) {
      
       this.socket.emit('startGame');
@@ -802,7 +802,7 @@ useRadarJammer(targetGrid: string[][], isInitiator: boolean): void {
     this.joinGame(gameId || Math.random().toString(36).substring(7), this.playerName);
     this.isMultiplayer = true;
     this.gamemode = 2;
-    this.showColors = false;
+    
   }
 
   joinGame(gameId: string, name: string): void {
