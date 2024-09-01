@@ -110,7 +110,7 @@
   </div>
   <div class="footer">
   <h2 style="margin: 0">{{ whosturn }}</h2>
-  <h1 class="bottom-message">{{ gameMessage }}</h1>
+  <h1 class="bottom-message" *ngIf="gamemode !== 0">{{ gameMessage }}</h1>
   </div>
 </div>
 

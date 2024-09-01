@@ -527,7 +527,7 @@ if (foundItem) {
   }
 
   acquireRandomItem(forPlayer: boolean): void {
-    const items = [  'Mine Bomb', 'Radar Jammer', 'Rocket Deceiver', 'Airstrike', 'Homing Missile' ]; 
+    const items = [  'Homing Missile' ]; 
     const randomItem = items[Math.floor(Math.random() * items.length)];
 
     if (forPlayer) {
@@ -696,12 +696,23 @@ useAirstrike(x: number, y: number, targetGrid: string[][], targetShips: { x: num
 
 useHomingMissile(x: number, y: number, targetGrid: string[][], targetShips: { x: number, y: number }[]): void {
   const adjacentCells = [
-    { x: x - 1, y: y }, { x: x + 1, y: y }, 
-    { x: x - 1, y: y - 1}, { x: x + 1, y: y + 1},
-    { x: x - 1, y: y + 1}, { x: x + 1, y: y - 1},  // Left and right
-    { x: x, y: y - 1 }, { x: x, y: y + 1 },
-    { x: x - 1, y: y - 1 }, { x: x + 1, y: y + 1 }, 
-    { x: x + 1, y: y - 1 }, { x: x - 1, y: y + 1 } 
+   // First layer around (x, y)
+   { x: x - 1, y: y }, { x: x + 1, y: y }, 
+   { x: x - 1, y: y - 1}, { x: x + 1, y: y + 1},
+   { x: x - 1, y: y + 1}, { x: x + 1, y: y - 1},
+   { x: x, y: y - 1 }, { x: x, y: y + 1 },
+ 
+   // Second layer around (x, y)
+   { x: x - 2, y: y }, { x: x + 2, y: y }, 
+   { x: x - 2, y: y - 2}, { x: x + 2, y: y + 2},
+   { x: x - 2, y: y + 2}, { x: x + 2, y: y - 2},
+   { x: x, y: y - 2 }, { x: x, y: y + 2 },
+   
+   // Diagonals for the second layer
+   { x: x - 1, y: y - 2 }, { x: x + 1, y: y + 2 }, 
+   { x: x - 1, y: y + 2 }, { x: x + 1, y: y - 2 },
+   { x: x - 2, y: y - 1 }, { x: x + 2, y: y + 1 }, 
+   { x: x - 2, y: y + 1 }, { x: x + 2, y: y - 1 }
   ];
 
   for (let cell of adjacentCells) {
