@@ -21,6 +21,13 @@ origin: '\*',
   }  
 }); 
 
+app.use((req, res, next) => {
+  console.log('Request received:', req.method, req.url);
+  res.on('finish', () => {
+    console.log('Response headers:', res.getHeaders());
+  });
+  next();
+});
 let games = {}; // Store active games
 let waitingGameId = null; 
 
