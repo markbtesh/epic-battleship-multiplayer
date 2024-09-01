@@ -53,7 +53,7 @@ export class GameBoardComponent implements OnInit {
   playerName: string = '';
   opponentName: string = '';
   playerIndex: number | null = null;
-  whosturn: string = "asdsa";
+  whosturn: string = "";
 
   // Method to handle when a ship gets hit
   handleHit(): void {
