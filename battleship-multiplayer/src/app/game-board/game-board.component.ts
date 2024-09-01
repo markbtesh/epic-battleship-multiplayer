@@ -72,9 +72,9 @@ export class GameBoardComponent implements OnInit {
     // Initialize socket with autoConnect set to false
     if (isPlatformBrowser(this.platformId)) {
       
-      this.socket = io('https://epic-battleship-multiplayer-server.vercel.app', {
-        transports: ['websocket', 'polling'], // Ensure WebSocket with a fallback to polling
-        secure: true // Important for CORS with credentials (like cookies)
+      this.socket = io('https://epic-battleship-multiplayer-server-4x1lukrf7.vercel.app', {
+        withCredentials: true, 
+        secure: true// Important for CORS with credentials (like cookies)
       });
       inject(ApplicationRef).isStable.pipe(
         first(isStable => isStable)
